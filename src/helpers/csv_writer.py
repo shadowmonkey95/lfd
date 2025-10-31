@@ -1,0 +1,31 @@
+import pathlib
+from typing import List
+
+import pandas as pd
+
+from src.helpers.concept import Concept
+
+
+def save_scenario_as_csv(scenario: List[Concept], output_dir: pathlib.Path):
+    train_dfs = []
+    test_dfs = []
+
+    for i, concept in enumerate(scenario):
+        train_df = pd.DataFrame(concept.train_data, columns=[f'feature_{i}' for i in range(concept.train_data.shape[1])])
+        train_df['label'] = 0
+        train_df['concept_name'] = concept.name
+        train_df['concept_id'] = i
+
+        test_df = pd.DataFrame(concept.test_data, columns=[f'feature_{i}' for i in range(concept.test_data.shape[1])])
+        test_df['label'] = concept.test_labels
+        test_df['concept_name'] = concept.name
+        test_df['concept_id'] = i
+
+        train_dfs.append(train_df)
+        test_dfs.append(test_df)
+
+    train_df = pd.concat(train_dfs)
+    test_df = pd.concat(test_dfs)
+
+    train_df.to_csv(output_dir / 'train.csv', index=False)
+    test_df.to_csv(output_dir / 'test.csv', index=False)

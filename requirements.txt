@@ -1,0 +1,7 @@
+pyclad
+imbalanced-learn
+tensorflow
+torch
+torchvision
+torchaudio
+tabulate
