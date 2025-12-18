@@ -59,7 +59,11 @@ def create_concepts_with_order(
     concepts = []
     for i in range(concepts_no):
         start_idx = i * concept_size
-        end_idx = min(start_idx + concept_size, total_len)
+        # end_idx = min(start_idx + concept_size, total_len)
+        if i == concepts_no - 1:
+            end_idx = total_len
+        else:
+            end_idx = start_idx + concept_size
         concept = data_sorted[start_idx:end_idx]
         if len(concept) > 0:
             concepts.append(concept)
@@ -112,64 +116,27 @@ def create_anomaly_clusters_closest_to_normal(anomaly_data, normal_clusters, clu
     anomaly_clusters = create_concepts(anomaly_data, concepts_no=clusters_no, size_per_concept=size_per_cluster)
     return _reassign_clusters(anomaly_clusters=anomaly_clusters, normal_clusters=normal_clusters)
 
-# def create_anomaly_clusters_time_based(normal_clusters, anomaly_data, sort_column, config):
-#     anomaly_data_sorted = anomaly_data[anomaly_data[:, sort_column].argsort()]
-#     n_features = anomaly_data.shape[1]  # Get number of columns
-
-#     anomaly_clusters = []
-#     cluster_info = []
-    
-#     for idx, normal_cluster in enumerate(normal_clusters):
-#         start_time = normal_cluster[:, sort_column].min()
-#         end_time = normal_cluster[:, sort_column].max()
-
-#         # Select anomalies in the same time window
-#         mask = (anomaly_data_sorted[:, sort_column] >= start_time) & \
-#                (anomaly_data_sorted[:, sort_column] <= end_time)
-#         anomalies_in_range = anomaly_data_sorted[mask]
-
-#         # Limit number of anomalies per concept
-#         # max_anomalies = int(config.anomaly_ratio * config.size_per_concept)
-#         max_anomalies = int(0.2 * config.size_per_concept)
-#         anomalies_in_range = anomalies_in_range[:max_anomalies]
-
-#         # Bug fix: Ensure proper 2D shape even when empty
-#         if len(anomalies_in_range) == 0:
-#             anomalies_in_range = np.empty((0, n_features))  # Correct shape: (0, n_features)
-        
-#         anomaly_clusters.append(anomalies_in_range)
-        
-#         cluster_info.append({
-#             'cluster_id': idx,
-#             'time_range': (start_time, end_time),
-#             'anomaly_count': len(anomalies_in_range),
-#             'is_empty': len(anomalies_in_range) == 0
-#         })
-
-#     return anomaly_clusters
-
-def create_anomaly_clusters_time_based(normal_clusters, anomaly_data, sort_column, config):
+def create_anomaly_clusters_time_based(normal_clusters, anomaly_data, sort_column, max_anomalies, config):
     anomaly_data_sorted = anomaly_data[anomaly_data[:, sort_column].argsort()]
     n_features = anomaly_data.shape[1]
-
+    
     anomaly_clusters = []
     cluster_info = []
     
     for idx, normal_cluster in enumerate(normal_clusters):
         start_time = normal_cluster[:, sort_column].min()
         end_time = normal_cluster[:, sort_column].max()
-
+        
         mask = (anomaly_data_sorted[:, sort_column] >= start_time) & \
                (anomaly_data_sorted[:, sort_column] <= end_time)
         anomalies_in_range = anomaly_data_sorted[mask]
-
-        max_anomalies = int(0.2 * config.size_per_concept)
-        ## TODOO: add to config
-        original_count = len(anomalies_in_range)  # Track before limiting
+        
+        original_count = len(anomalies_in_range)
         anomalies_in_range = anomalies_in_range[:max_anomalies]
-
+        
+        # Warn about empty clusters
         if len(anomalies_in_range) == 0:
-            anomalies_in_range = np.empty((0, n_features))
+            print(f"WARNING: Concept {idx} has no anomalies in time range [{start_time}, {end_time}]")
         
         anomaly_clusters.append(anomalies_in_range)
         
@@ -181,12 +148,10 @@ def create_anomaly_clusters_time_based(normal_clusters, anomaly_data, sort_colum
             'original_anomaly_count': original_count,
             'is_empty': len(anomalies_in_range) == 0
         })
-
-    # Write to file
+    
     write_cluster_info(normal_clusters, anomaly_clusters, cluster_info, sort_column, 'tmp_clusters.txt')
     
     return anomaly_clusters
-
 
 def write_cluster_info(normal_clusters, anomaly_clusters, cluster_info, sort_column, filename='tmp_clusters.txt'):
     """Write detailed cluster information to a file"""

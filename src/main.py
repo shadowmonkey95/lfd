@@ -37,27 +37,43 @@ from data.helpers.data_loader import load_csv_dataset, load_npy_dataset
 from src.helpers import clustering
 from src.helpers.prepare_scenario import prepare_and_save_scenario, prepare_scenario
 from src.helpers.scenario_config import ScenarioConfig, ScenarioType
+from sklearn.metrics import average_precision_score
+from pyclad.metrics.base.base_metric import BaseMetric
+
+# ====== Custom PR-AUC Metric ======
+class PrAuc(BaseMetric):
+    def compute(self, anomaly_scores, y_pred, y_true) -> float:
+        return average_precision_score(y_true=y_true, y_score=anomaly_scores)
+
+    def name(self) -> str:
+        return "PR-AUC"
 
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent
-dataset_name = 'creditcard_with_time_preprocessed'
+# dataset_name = 'both_preprocessed_normalized'
+# target_col = 'isFraud'
+dataset_name = 'creditcard_with_time_preprocessed2'
 target_col = 'Class'
+sort_column = 0
 
-concepts_no = 6
-size_per_concept = 47467
+concepts_no = 5
+size_per_concept = 56960
 
-ScenarioType = Literal['random_anomalies', 'clustered_with_random_assignment', 'clustered_with_closest_assignment', 'time_based']
+ScenarioType = Literal['random_anomalies', 'clustered_with_random_assignment', 'clustered_with_closest_assignment']
 scenario_config = "time_based"
+config = ScenarioConfig(scenario_type=scenario_config, concepts_no=concepts_no, size_per_concept=size_per_concept)
 if __name__ == '__main__':
     # ====== Split normal, anomaly data + generate npy scenario======
     file_name = dataset_name + ".csv"
     file_path = BASE_DIR / "data/preprocessed" / file_name
 
     normal_data, anomaly_data = load_csv_dataset(file_path, target_col=target_col, exclude_columns=[])
+    prepare_and_save_scenario(dataset_name, normal_data, anomaly_data, config, sort_column)
 
-    for scenario_type in get_args(ScenarioType):
-        config = ScenarioConfig(scenario_type=scenario_type, concepts_no=concepts_no, size_per_concept=size_per_concept)
+    # UNCOMMENT TO RUN ALL Scenario but time based
+    # for scenario_type in get_args(ScenarioType):
+    #     config = ScenarioConfig(scenario_type=scenario_type, concepts_no=concepts_no, size_per_concept=size_per_concept)
 
-        prepare_and_save_scenario(dataset_name, normal_data, anomaly_data, config)
+    #     prepare_and_save_scenario(dataset_name, normal_data, anomaly_data, config)
     
     # ====== Load npy scenario ======
     dataset_path = (
@@ -98,7 +114,8 @@ if __name__ == '__main__':
                 EnergyEvaluationCallback(),
                 TimeEvaluationCallback(),
                 ConceptMetricCallback(
-                    base_metric=RocAuc(),
+                    # base_metric=RocAuc(),
+                    base_metric=PrAuc(),
                     metrics=[
                         ContinualAverage(), 
                         BackwardTransfer(), 
@@ -115,6 +132,8 @@ if __name__ == '__main__':
         
         
     # ====== Plot heatmaps ======
+    # out_dir = pathlib.Path("output") / f"{dataset_name}_json" / f"{scenario_config}_{concepts_no}_concepts_{size_per_concept}_each"
+    # out_dir.mkdir(exist_ok=True, parents=True)
     results_dir = BASE_DIR / "output" / dataset_name
     results_dir = out_dir
     
@@ -127,8 +146,8 @@ if __name__ == '__main__':
         with open(results_path) as fp:
             loaded_data = json.load(fp)
         
-        concepts_order = loaded_data["concept_metric_callback_ROC-AUC"]["concepts_order"]
-        metric_matrix = loaded_data["concept_metric_callback_ROC-AUC"]["metric_matrix"]
+        concepts_order = loaded_data["concept_metric_callback_PR-AUC"]["concepts_order"]
+        metric_matrix = loaded_data["concept_metric_callback_PR-AUC"]["metric_matrix"]
         
         names_mapping = {concept: f"C{idx}" for idx, concept in enumerate(concepts_order)}
         
@@ -141,7 +160,7 @@ if __name__ == '__main__':
             names_mapping=names_mapping,
             annotate=True,
             output_path=output_path,
-            ignore_upper_diagonal=True,
+            ignore_upper_diagonal=False,
         )
         plt.close('all')
         print(f"Heatmap saved to {output_path}")

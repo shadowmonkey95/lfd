@@ -6,7 +6,7 @@ import seaborn as sns
 import pathlib
 
 
-file_name = "train_transaction.csv"
+file_name = "both_preprocessed_normalized.csv"
 # target_column = "Class"
 # Display all columns
 # pd.set_option('display.max_columns', None)
@@ -15,7 +15,7 @@ file_name = "train_transaction.csv"
 
 # ====== Load the dataset ======
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent.parent
-file_path = BASE_DIR / "data/raw/ieee-fraud-detection" / file_name
+file_path = BASE_DIR / "data/preprocessed/ieee-fraud-detection" / file_name
 df = pd.read_csv(file_path)
 
 

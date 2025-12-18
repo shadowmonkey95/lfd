@@ -28,7 +28,7 @@ def split_into_train_test(normal_cluster, anomaly_cluster):
 
 
 def _create_anomaly_clusters(normal_clusters, anomaly_data, config: ScenarioConfig, sort_column: int = None):
-    anomalies_no_per_cluster = min(int(len(anomaly_data) / len(normal_clusters)), int(2 * config.size_per_concept / 5))
+    anomalies_no_per_cluster = min(int(len(anomaly_data) / len(normal_clusters)), int(0.2 * config.size_per_concept / 5))
 
     if config.scenario_type == 'random_anomalies':
         return create_random_anomaly_clusters(anomaly_data, clusters_no=config.concepts_no,
@@ -40,11 +40,12 @@ def _create_anomaly_clusters(normal_clusters, anomaly_data, config: ScenarioConf
         return create_anomaly_clusters_closest_to_normal(anomaly_data, normal_clusters, clusters_no=config.concepts_no,
                                                          size_per_cluster=anomalies_no_per_cluster)
     elif config.scenario_type == 'time_based':
-        sort_column = getattr(config, "time_column_index", 0)
+        # sort_column = getattr(config, "time_column_index", 0)
         return create_anomaly_clusters_time_based(
             normal_clusters=normal_clusters,
             anomaly_data=anomaly_data,
             sort_column=sort_column,
+            max_anomalies=anomalies_no_per_cluster,
             config=config
         )
 
@@ -67,7 +68,7 @@ def prepare_scenario_with_order(normal_data: np.ndarray, anomaly_data: np.ndarra
                                       size_per_concept=config.size_per_concept,
                                       sort_column=sort_column
                                       )
-    anomalies_clusters = _create_anomaly_clusters(normal_clusters, anomaly_data, config=config)
+    anomalies_clusters = _create_anomaly_clusters(normal_clusters, anomaly_data, config=config, sort_column=sort_column)
 
     concepts = []
     for i, (normal_cluster, anomaly_cluster) in enumerate(zip(normal_clusters, anomalies_clusters)):
