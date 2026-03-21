@@ -7,3 +7,10 @@ torchaudio
 tabulate
 jupyter
 ipykernel
+# eda notebook
+lightgbm
+xgboost
+catboost
+eli5
+shap
+altair

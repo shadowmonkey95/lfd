@@ -49,26 +49,41 @@ class PrAuc(BaseMetric):
         return "PR-AUC"
 
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent
-# dataset_name = 'both_preprocessed_normalized'
-# target_col = 'isFraud'
-dataset_name = 'creditcard_with_time_preprocessed2'
-target_col = 'Class'
-sort_column = 0
+dataset_name = 'ead_preprocessed_with_time'
+target_col_name = 'isFraud'
+time_col_name = 'TransactionDT'
 
-concepts_no = 5
-size_per_concept = 56960
+concepts_no = 8
+size_per_concept = 73817
 
-ScenarioType = Literal['random_anomalies', 'clustered_with_random_assignment', 'clustered_with_closest_assignment']
+ScenarioType = Literal['random_anomalies', 'clustered_with_random_assignment', 'clustered_with_closest_assignment', 'all_anomalies']
+# One Scenario train
 scenario_config = "time_based"
 config = ScenarioConfig(scenario_type=scenario_config, concepts_no=concepts_no, size_per_concept=size_per_concept)
 if __name__ == '__main__':
     # ====== Split normal, anomaly data + generate npy scenario======
     file_name = dataset_name + ".csv"
-    file_path = BASE_DIR / "data/preprocessed" / file_name
+    file_path = BASE_DIR / "data/preprocessed/ieee-fraud-detection" / file_name
 
-    normal_data, anomaly_data = load_csv_dataset(file_path, target_col=target_col, exclude_columns=[])
-    prepare_and_save_scenario(dataset_name, normal_data, anomaly_data, config, sort_column)
-
+    normal_data, anomaly_data, column_names = load_csv_dataset(
+        file_path, 
+        target_col=target_col_name, 
+        exclude_columns=[time_col_name],
+        keep_columns=[time_col_name]
+    )
+    print(f"Columns returned by loader: {column_names}")
+    try:
+        sort_idx = column_names.index(time_col_name)
+    except ValueError:
+        sort_idx = None
+     
+    prepare_and_save_scenario(
+        dataset_name, 
+        normal_data, 
+        anomaly_data, 
+        config, 
+        sort_column=sort_idx
+    )
     # UNCOMMENT TO RUN ALL Scenario but time based
     # for scenario_type in get_args(ScenarioType):
     #     config = ScenarioConfig(scenario_type=scenario_type, concepts_no=concepts_no, size_per_concept=size_per_concept)
@@ -80,7 +95,8 @@ if __name__ == '__main__':
         BASE_DIR
         / "out"
         / f"{dataset_name}_npy"
-        / f"{dataset_name}_{scenario_config}_{concepts_no}_concepts_{size_per_concept}_per_cluster.npy"
+        # / f"{dataset_name}_{scenario_config}_{concepts_no}_concepts_{size_per_concept}_per_cluster.npy"
+        / f"{dataset_name}_{scenario_config}_{concepts_no}_concepts.npy"
     )
     dataset = read_dataset_from_npy(dataset_path, dataset_name=dataset_name)
     out_dir = pathlib.Path("output") / f"{dataset_name}_json" / f"{scenario_config}_{concepts_no}_concepts_{size_per_concept}_each"
@@ -114,8 +130,8 @@ if __name__ == '__main__':
                 EnergyEvaluationCallback(),
                 TimeEvaluationCallback(),
                 ConceptMetricCallback(
-                    # base_metric=RocAuc(),
-                    base_metric=PrAuc(),
+                    base_metric=RocAuc(),
+                    # base_metric=PrAuc(),
                     metrics=[
                         ContinualAverage(), 
                         BackwardTransfer(), 
@@ -146,8 +162,8 @@ if __name__ == '__main__':
         with open(results_path) as fp:
             loaded_data = json.load(fp)
         
-        concepts_order = loaded_data["concept_metric_callback_PR-AUC"]["concepts_order"]
-        metric_matrix = loaded_data["concept_metric_callback_PR-AUC"]["metric_matrix"]
+        concepts_order = loaded_data["concept_metric_callback_ROC-AUC"]["concepts_order"]
+        metric_matrix = loaded_data["concept_metric_callback_ROC-AUC"]["metric_matrix"]
         
         names_mapping = {concept: f"C{idx}" for idx, concept in enumerate(concepts_order)}
         

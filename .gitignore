@@ -71,3 +71,5 @@ data/*
 heatmaps
 out
 output
+note.txt
+tmp_clusters.txt
