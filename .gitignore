@@ -175,3 +175,24 @@ examples/resources/vision/
 
 # custom
 /memory
+# ============================================================
+# lfd research project (everything below is ours, not upstream pyCLAD)
+# ============================================================
+# Claude Code: agents, commands, settings and project instructions stay local
+.claude/
+CLAUDE.md
+CLAUDE.local.md
+
+# data + experiment outputs (large, regenerable, or private)
+data/raw/*
+!data/raw/synthetic-demo/
+data/preprocess/*
+!data/preprocess/.gitkeep
+results/
+
+# private conversations with the supervisor (repo is public)
+research/meetings/
+
+# local environments
+.venv/
+venv/

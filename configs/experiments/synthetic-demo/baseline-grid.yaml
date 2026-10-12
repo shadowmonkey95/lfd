@@ -1,0 +1,26 @@
+# One file = one sweep. Every scenario x strategy x model x seed becomes its own run folder.
+# Incompatible pairs are skipped automatically (e.g. MSTE needs concept_aware; ReplayOnly has no agnostic).
+name: baseline-grid
+dataset: synthetic-demo          # folder name in data/raw (and data/preprocess)
+data_version: latest             # or e.g. prep-v02 to pin a version
+proposal: null                   # REQUIRED (path to an approved improvement proposal) for non-baseline sweeps
+
+scenarios: [concept_incremental, concept_aware]
+
+models:
+  - {name: IsolationForest, params: {n_estimators: 100}}
+
+strategies:                      # Naive = cost floor / forgetting ceiling; Cumulative = cost ceiling / retention ceiling
+  - {name: Naive}
+  - {name: Cumulative}
+  - {name: MSTE}
+  - {name: ReplayOnly, params: {buffer_size: 200}}
+  - {name: ReplayEnhanced, params: {buffer_size: 200}}
+
+seeds: [0, 1, 2]
+features: []                     # opt-in features, e.g. [{name: concept_order, params: {order: reverse}}]
+                                 # or on the CLI: --feature concept_order:order=reverse  (list: python -m lfd.features)
+metrics: [ROC-AUC, AP]           # AP is the one that matters for rare-anomaly data such as fraud
+track_memory: false              # true -> tracemalloc peak memory per step (slow on big data)
+energy: false                    # true -> codecarbon offline tracker (slower)
+energy_country: VNM
