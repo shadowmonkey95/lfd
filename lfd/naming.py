@@ -47,7 +47,9 @@ def strategy_tag(name: str, params: dict | None) -> str:
 
 def model_tag(name: str, params: dict | None) -> str:
     abbrev = {"n_estimators": "n", "contamination": "cont", "n_neighbors": "k", "max_samples": "ms",
-              "kernel": "", "nu": "nu", "random_state": None}
+              "kernel": "", "nu": "nu", "random_state": None, "verbose": None,
+              "hidden_neuron_list": "h", "encoder_neuron_list": "enc", "decoder_neuron_list": "dec",
+              "latent_dim": "z", "epoch_num": "ep", "preprocessing": "pre", "batch_size": "bs", "lr": "lr"}
     parts = [name] + [f"{abbrev.get(k, slug(k, 6))}{slug(v, 10)}" for k, v in sorted((params or {}).items())
                       if abbrev.get(k, "") is not None]
     return slug("-".join(parts), 50)

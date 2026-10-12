@@ -33,7 +33,20 @@ from pyclad.metrics.continual.forgetting_measure_strict import ForgettingMeasure
 from pyclad.metrics.continual.forward_transfer import ForwardTransfer
 
 # ---------------- models ----------------
-SEEDABLE = {"IsolationForest"}  # models that accept random_state
+SEEDABLE = {"IsolationForest", "AE", "VAE"}  # models that accept random_state
+
+
+def _pyod_deep(kind: str, **p) -> Model:
+    """pyOD deep models (need torch). Imported lazily so torch stays optional."""
+    from pyclad.models.adapters.pyod_adapters import PyODAdapter
+
+    p.setdefault("verbose", 0)
+    if kind == "AE":
+        from pyod.models.auto_encoder import AutoEncoder
+        return PyODAdapter(AutoEncoder(**p), model_name="AE")
+    from pyod.models.vae import VAE
+    return PyODAdapter(VAE(**p), model_name="VAE")
+
 
 MODELS: Dict[str, Callable[..., Model]] = {
     "IsolationForest": lambda **p: IsolationForestAdapter(**p),
@@ -41,6 +54,10 @@ MODELS: Dict[str, Callable[..., Model]] = {
     "OCSVM": lambda **p: OneClassSVMAdapter(**p),
     "COPOD": lambda **p: COPODAdapter(**p),
     "ECOD": lambda **p: ECODAdapter(**p),
+    # legacy lfd: AE(hidden_neuron_list=[32, 24, 16], epoch_num=20); VAE([32,24,16]/[16,24,32], latent_dim=8,
+    # epoch_num=20, preprocessing=False). Pass these as params in the sweep config.
+    "AE": lambda **p: _pyod_deep("AE", **p),
+    "VAE": lambda **p: _pyod_deep("VAE", **p),
 }
 
 # ---------------- strategies ----------------
