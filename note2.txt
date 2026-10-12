@@ -1,0 +1,28 @@
+4sparkov:
+#TIME
+tmux new -s sparkov_time
+source venv/bin/activate
+python -m src.main2
+
+switch -> time
+dataset_name    = '4sparkov_preprocessed_with_time'
+target_col_name = 'is_fraud'
+time_col_name   = 'unix_time'
+concepts_no     = 8
+size_per_concept = 230_206
+
+file_path = BASE_DIR / "data/preprocessed/4_sparkov" / file_name
+
+# OTHER
+tmux new -s sparkov_cluster
+source venv/bin/activate
+python -m src.main2
+
+switch -> all
+dataset_name    = '4sparkov_preprocessed_without_time'
+target_col_name = 'is_fraud'
+time_col_name   = 'unix_time'
+concepts_no     = 8
+size_per_concept = 230_206
+
+file_path = BASE_DIR / "data/preprocessed/4_sparkov" / file_name

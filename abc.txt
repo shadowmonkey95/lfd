@@ -1,0 +1,94 @@
+All columns: ['url_length', 'domain_length', 'path_length', 'query_length', 'tld_length', 'num_dots', 'num_hyphens', 'num_underscores', 'num_slashes', 'num_digits', 'num_special', 'num_equals', 'num_ampersands', 'num_question', 'num_at', 'digit_ratio', 'special_ratio', 'num_subdomains', 'is_https', 'has_ip', 'has_port', 'url_entropy', 'domain_entropy', 'suspicious_keyword_count', 'isFraud']
+Target: isFraud
+Exclude: set()
+Keep: set()
+Feature cols: ['url_length', 'domain_length', 'path_length', 'query_length', 'tld_length', 'num_dots', 'num_hyphens', 'num_underscores', 'num_slashes', 'num_digits', 'num_special', 'num_equals', 'num_ampersands', 'num_question', 'num_at', 'digit_ratio', 'special_ratio', 'num_subdomains', 'is_https', 'has_ip', 'has_port', 'url_entropy', 'domain_entropy', 'suspicious_keyword_count']
+Final order: ['url_length', 'domain_length', 'path_length', 'query_length', 'tld_length', 'num_dots', 'num_hyphens', 'num_underscores', 'num_slashes', 'num_digits', 'num_special', 'num_equals', 'num_ampersands', 'num_question', 'num_at', 'digit_ratio', 'special_ratio', 'num_subdomains', 'is_https', 'has_ip', 'has_port', 'url_entropy', 'domain_entropy', 'suspicious_keyword_count']
+--- Preparing Scenario: malicious_url_preprocessed ---
+--- sort_column: 0 ---
+Strategy [drop]: Created 8 concepts.
+Sizes: [43543, 43543, 43543, 43543, 43543, 43543, 43543, 43543]
+Cluster information written to 'tmp_clusters.txt'
+Successfully saved 8 concepts to out/malicious_url_preprocessed_npy
+--- Preparing Scenario: malicious_url_preprocessed ---
+--- sort_column: 0 ---
+Strategy [drop]: Created 8 concepts.
+Sizes: [43543, 43543, 43543, 43543, 43543, 43543, 43543, 43543]
+Successfully saved 8 concepts to out/malicious_url_preprocessed_npy
+--- Preparing Scenario: malicious_url_preprocessed ---
+--- sort_column: 0 ---
+Strategy [drop]: Created 8 concepts.
+Sizes: [43543, 43543, 43543, 43543, 43543, 43543, 43543, 43543]
+Successfully saved 8 concepts to out/malicious_url_preprocessed_npy
+--- Preparing Scenario: malicious_url_preprocessed ---
+--- sort_column: 0 ---
+Strategy [drop]: Created 8 concepts.
+Sizes: [43543, 43543, 43543, 43543, 43543, 43543, 43543, 43543]
+0 0 0.0
+0 1 0.8106504299105992
+0 2 1.326821537836376
+0 3 1.7558918182991234
+0 4 2.235927886559381
+0 5 2.9146307039319286
+0 6 3.913454506138744
+0 7 6.2916849792866145
+1 0 0.8106504299105992
+1 1 0.0
+1 2 0.5538063899769035
+1 3 0.9935744647586461
+1 4 1.487224638543074
+1 5 2.190064260213999
+1 6 3.2604931569648774
+1 7 5.7119014800242365
+2 0 1.326821537836376
+2 1 0.5538063899769035
+2 2 0.0
+2 3 0.45136991354608963
+2 4 0.9592416368532664
+2 5 1.6807479246229866
+2 6 2.789772702243982
+2 7 5.305189815555376
+3 0 1.7558918182991234
+3 1 0.9935744647586461
+3 2 0.45136991354608963
+3 3 0.0
+3 4 0.5193067724898013
+3 5 1.2493521167042756
+3 6 2.3934776144209087
+3 7 4.932433180375514
+4 0 2.235927886559381
+4 1 1.487224638543074
+4 2 0.9592416368532664
+4 3 0.5193067724898013
+4 4 0.0
+4 5 0.7446336017100376
+4 6 1.9244835740227237
+4 7 4.4909551487691175
+5 0 2.9146307039319286
+5 1 2.190064260213999
+5 2 1.6807479246229866
+5 3 1.2493521167042756
+5 4 0.7446336017100376
+5 5 0.0
+5 6 1.2823308104346476
+5 7 3.8523250654707772
+6 0 3.913454506138744
+6 1 3.2604931569648774
+6 2 2.789772702243982
+6 3 2.3934776144209087
+6 4 1.9244835740227237
+6 5 1.2823308104346476
+6 6 0.0
+6 7 3.098426230358059
+7 0 6.2916849792866145
+7 1 5.7119014800242365
+7 2 5.305189815555376
+7 3 4.932433180375514
+7 4 4.4909551487691175
+7 5 3.8523250654707772
+7 6 3.098426230358059
+7 7 0.0
+Successfully saved 8 concepts to out/malicious_url_preprocessed_npy
+Running AE with Naive on <bound method ConceptsDataset.name of <pyclad.data.datasets.concepts_dataset.ConceptsDataset object at 0x7d7d3e3ad450>>
+--- Preparing Scenario: malicious_url_preprocessed ---
+--- sort_column: 0 ---
