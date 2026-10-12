@@ -9,6 +9,29 @@ Scope tags: **[core-pyclad]** on by default in pyCLAD · **[core-lfd]** harness,
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-12
+Rebuilt the project on the latest upstream pyCLAD (v0.3.0+, commit 9de39e1). Old project preserved as tag `legacy-v1`
+and branches `legacy/*`.
+### Added
+- [core-lfd] `lfd/streams/time_windows.py` — generic time-based concept streams (`build_time_concepts`,
+  `TimeStreamConfig`). Defaults reproduce legacy `time_based` scenario exactly (bit-identical concepts verified on
+  IEEE-shaped data, incl. the empty-window fallback). Opt-in alternatives: `window=equal_time`,
+  `anomaly_span=test_period`, `anomaly_pick=spread`, explicit `anomaly_cap`, `tail=include|overflow`.
+- [core-lfd] `lfd/datasets/ieee_ead.py` — artgor/EAD feature engineering for IEEE-CIS (port of
+  `ead_preprocess_keepTransactionDT.py`, in memory, parameterised).
+- [core-lfd] `pipelines/ieee-fraud-detection/prep_v01.py` — legacy-faithful IEEE time-based stream (8 concepts).
+- [core-lfd] Models `AE`, `VAE` (pyOD, torch loaded lazily) in `lfd/registry.py`.
+- [core-lfd] Configs `ieee-fraud-detection/legacy-timebased-grid.yaml` (reproduces legacy main.py) and
+  `pilot-iforest-1seed.yaml`.
+- [core-lfd] Preprocessing manifests record `lfd_version` and `git_commit`.
+### Not ported (on purpose)
+- Custom `PrAuc` metric — identical to pyCLAD's built-in `AP` (`average_precision_score` on anomaly scores).
+- Clustering scenarios (`random_anomalies`, `clustered_*`) — still in `legacy-v1`; see BL-0004.
+- Exploration notebooks, tmp files, CSV writers, `pipeline.py` UNSW/NSL-KDD demo.
+### Changed
+- [core-lfd] Package `lab` → `lfd`; research records moved to `research/`; Claude config to `.claude/` (gitignored).
+- Legacy `ConceptMetricCallback(metrics=...)` is `summarized_metrics=` in current pyCLAD — handled by `lfd.run`.
+
 ## [0.1.0] - 2026-10-12
 ### Added
 - [core-lfd] Research harness: naming/never-overwrite, approval gate, versioned preprocessing, sweep runner,

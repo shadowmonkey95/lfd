@@ -1,0 +1,32 @@
+# Reproduces the legacy lfd experiment (tag legacy-v1, src/main.py) on the new harness:
+# time-based stream (prep-v01), concept-incremental scenario, Naive / Cumulative / ReplayEnhanced(1000).
+# Differences vs legacy: AP (= legacy "PR-AUC") is reported next to ROC-AUC; 3 seeds instead of 1;
+# every run gets its own folder (legacy overwrote output_<model>_<strategy>_<dataset>.json).
+name: legacy-timebased-grid
+dataset: ieee-fraud-detection
+data_version: prep-v01
+proposal: null
+
+scenarios: [concept_incremental]
+
+models:
+  - {name: IsolationForest}
+  - {name: ECOD}
+  - {name: COPOD}
+  - {name: AE, params: {hidden_neuron_list: [32, 24, 16], epoch_num: 20}}
+  # Legacy also ran these. On IEEE they are very slow: Cumulative re-fits on up to ~340k rows x ~400 features
+  # (LOF/OCSVM scale ~quadratically). Enable only after a 1-seed pilot shows acceptable time.
+  # - {name: LOF}
+  # - {name: OCSVM}
+
+strategies:
+  - {name: Naive}
+  - {name: Cumulative}
+  - {name: ReplayEnhanced, params: {buffer_size: 1000}}
+
+seeds: [0, 1, 2]
+features: []
+metrics: [ROC-AUC, AP]
+track_memory: false
+energy: false          # legacy used EnergyEvaluationCallback; set true to compare energy as a cost axis
+energy_country: VNM

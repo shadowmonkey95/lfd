@@ -1,0 +1,11 @@
+# Quick pilot (minutes): check timing and that numbers are sane before launching the full grid.
+name: pilot-iforest-1seed
+dataset: ieee-fraud-detection
+data_version: prep-v01
+proposal: null
+scenarios: [concept_incremental]
+models: [{name: IsolationForest}]
+strategies: [{name: Naive}, {name: Cumulative}, {name: ReplayEnhanced, params: {buffer_size: 1000}}]
+seeds: [0]
+features: []
+metrics: [ROC-AUC, AP]

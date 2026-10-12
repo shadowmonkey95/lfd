@@ -114,8 +114,15 @@ def main() -> None:
     shutil.copy2(args.pipeline, naming.file_in(d, "pipeline", "py"))
     shutil.copy2(args.proposal, naming.file_in(d, "proposal", "md"))
 
+    from lfd import LFD_VERSION
+    from lfd.run import env_info
+
+    env = env_info()
     manifest = {
         "dataset": args.raw,
+        "lfd_version": LFD_VERSION,
+        "git_commit": env.get("git_commit"),
+        "git_dirty": env.get("git_dirty"),
         "version": version,
         "folder": d.name,
         "proposal_id": proposal.get("id"),
