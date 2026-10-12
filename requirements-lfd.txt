@@ -1,3 +1,4 @@
+# lfd research layer (pyCLAD itself: pip install -e .)
 pyyaml
 pyarrow
 pandas
@@ -5,3 +6,5 @@ scipy
 matplotlib
 tabulate
 pytest
+# optional: torch  (AE / VAE models)
+# optional: kaggle (lets the data agent download Kaggle notebooks)
