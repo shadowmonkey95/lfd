@@ -32,6 +32,8 @@ from pyclad.metrics.continual.final_step_average import FinalStepAverage
 from pyclad.metrics.continual.forgetting_measure_strict import ForgettingMeasureStrict
 from pyclad.metrics.continual.forward_transfer import ForwardTransfer
 
+from lfd.metrics import DiagonalAverage, PastConceptsAverage
+
 # ---------------- models ----------------
 SEEDABLE = {"IsolationForest", "AE", "VAE"}  # models that accept random_state
 
@@ -85,7 +87,8 @@ SCENARIOS = {
 
 # ---------------- metrics ----------------
 BASE_METRICS = {"ROC-AUC": RocAuc, "AP": AveragePrecision, "F1": F1Score}
-SUMMARY_METRICS = [ContinualAverage, BackwardTransfer, ForwardTransfer, ForgettingMeasureStrict, FinalStepAverage]
+SUMMARY_METRICS = [ContinualAverage, BackwardTransfer, ForwardTransfer, ForgettingMeasureStrict, FinalStepAverage,
+                   DiagonalAverage, PastConceptsAverage]  # last two: BL-0005 (lfd/metrics.py)
 
 
 STRATEGY_CLASSES = {"Naive": NaiveStrategy, "Cumulative": CumulativeStrategy, "MSTE": MSTE,
