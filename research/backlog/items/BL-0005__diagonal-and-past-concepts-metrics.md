@@ -1,17 +1,17 @@
 ---
 id: BL-0005
 title: diagonal-and-past-concepts-metrics
-status: in-progress
+status: done
 type: feature
 scope: core-lfd
 priority: P1
 source: research/meetings/20261012-235445__meeting__prof-sync-knowledge-accumulation-diagonal-ROC-AUC-heatmaps-A.md
 created: 2026-10-12T23:55:38
-updated: 2026-10-12T23:55:38
+updated: 2026-10-13T00:03:10
 branch: bl-0005-diagonal-metrics-heatmaps-docs
-commits: 
-feature_flag: 
-changelog: 
+commits: a3e4de6
+feature_flag: -
+changelog: Unreleased
 ---
 ## Request
 PROF: "we should also track entries on the main diagonal only. It is possible to do this by adding one function in the metrics file."

@@ -1,14 +1,14 @@
 ---
 id: BL-0011
 title: knowledge-accumulation-sweep
-status: new
+status: blocked
 type: research-idea
 scope: experiment
 priority: P2
 source: research/meetings/20261012-235445__meeting__prof-sync-knowledge-accumulation-diagonal-ROC-AUC-heatmaps-A.md
 created: 2026-10-12T23:55:38
-updated: 2026-10-12T23:55:38
-branch: 
+updated: 2026-10-13T00:03:10
+branch: proposal research/proposals/ieee-fraud-detection/20261013-000115__improvement__ieee-fraud-detection__knowledge-accumulation-5seed-sweep.md
 commits: 
 feature_flag: 
 changelog: 
@@ -31,3 +31,6 @@ Proposal in research/proposals/ieee-fraud-detection/.
 
 ## Open questions
 Is the 3-seed `legacy-timebased-grid` enough as a first look, with 5 seeds only for the thesis sweep?
+
+## Status
+Blocked on proposal research/proposals/ieee-fraud-detection/20261013-000115__improvement__ieee-fraud-detection__knowledge-accumulation-5seed-sweep.md (pending) and on prep-v01 data existing (needs its own approved data proposal).

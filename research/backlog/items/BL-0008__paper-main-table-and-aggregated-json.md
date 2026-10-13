@@ -1,17 +1,17 @@
 ---
 id: BL-0008
 title: paper-main-table-and-aggregated-json
-status: in-progress
+status: done
 type: improvement
 scope: core-lfd
 priority: P2
 source: research/meetings/20261012-235445__meeting__prof-sync-knowledge-accumulation-diagonal-ROC-AUC-heatmaps-A.md
 created: 2026-10-12T23:55:38
-updated: 2026-10-12T23:55:38
+updated: 2026-10-13T00:03:10
 branch: bl-0005-diagonal-metrics-heatmaps-docs
-commits: 
-feature_flag: 
-changelog: 
+commits: 6fe38f3
+feature_flag: -
+changelog: Unreleased
 ---
 ## Request
 PROF: "usually in the paper we do a big table with aggregated metrics, and display a few selected heatmaps and upload the rest of them on GitHub."

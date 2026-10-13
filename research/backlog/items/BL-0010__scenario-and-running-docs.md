@@ -1,17 +1,17 @@
 ---
 id: BL-0010
 title: scenario-and-running-docs
-status: in-progress
+status: done
 type: chore
 scope: core-lfd
 priority: P2
 source: research/meetings/20261012-235445__meeting__prof-sync-knowledge-accumulation-diagonal-ROC-AUC-heatmaps-A.md
 created: 2026-10-12T23:55:38
-updated: 2026-10-12T23:55:38
+updated: 2026-10-13T00:03:10
 branch: bl-0005-diagonal-metrics-heatmaps-docs
-commits: 
-feature_flag: 
-changelog: 
+commits: 3cc4d11
+feature_flag: -
+changelog: Unreleased
 ---
 ## Request
 PROF: "if you can distill an .md file that explains how the scenarios / datasets were constructed, I can write about it in the paper. And maybe it is a good idea for next students who want to work on it, knowing how experiments can be run, etc."

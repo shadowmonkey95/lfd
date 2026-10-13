@@ -1,17 +1,17 @@
 ---
 id: BL-0006
 title: evaluate-posthoc-knowledge-accumulation
-status: in-progress
+status: done
 type: feature
 scope: core-lfd
 priority: P1
 source: research/meetings/20261012-235445__meeting__prof-sync-knowledge-accumulation-diagonal-ROC-AUC-heatmaps-A.md
 created: 2026-10-12T23:55:38
-updated: 2026-10-12T23:55:38
+updated: 2026-10-13T00:03:10
 branch: bl-0005-diagonal-metrics-heatmaps-docs
-commits: 
-feature_flag: 
-changelog: 
+commits: 6fe38f3
+feature_flag: -
+changelog: Unreleased
 ---
 ## Request
 ME: "very rarely Replay decreases a single score, and in quite a few of the cells Replay increases the scores."

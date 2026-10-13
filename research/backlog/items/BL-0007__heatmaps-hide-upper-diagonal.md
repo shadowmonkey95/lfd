@@ -1,17 +1,17 @@
 ---
 id: BL-0007
 title: heatmaps-hide-upper-diagonal
-status: in-progress
+status: done
 type: improvement
 scope: core-lfd
 priority: P2
 source: research/meetings/20261012-235445__meeting__prof-sync-knowledge-accumulation-diagonal-ROC-AUC-heatmaps-A.md
 created: 2026-10-12T23:55:38
-updated: 2026-10-12T23:55:38
+updated: 2026-10-13T00:03:10
 branch: bl-0005-diagonal-metrics-heatmaps-docs
-commits: 
-feature_flag: 
-changelog: 
+commits: 6fe38f3
+feature_flag: -
+changelog: Unreleased (researcher-requested default change)
 ---
 ## Request
 PROF: "it would be great if in heatmaps we can hide the entries above the diagonal."
@@ -32,3 +32,6 @@ core-lfd. **Default change explicitly requested by the researcher** in the 2026-
 
 ## Open questions
 None.
+
+## Resolution
+Implemented as a **researcher-requested default change** (meeting 2026-10-12, researcher notes item 3: "hide entries above the diagonal by default"). Plots only; no numbers change. Recorded in CHANGELOG [Unreleased] → Changed.
