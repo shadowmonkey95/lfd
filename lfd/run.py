@@ -8,7 +8,7 @@ Output per run (never overwritten):
       <run_id>__config.json         fully-resolved config of THIS run (+ sweep id, data folder)
       <run_id>__env.json            python/package versions, git commit
       <run_id>__run.log             log
-      <run_id>__heatmap_<metric>.png / .pdf
+      <run_id>__heatmap_<metric>.png / .pdf   cells above the diagonal hidden unless heatmap_show_upper_diagonal: true
 Append-only index: results/<dataset>/runs_index.jsonl  (one line per run, incl. failures)
 """
 from __future__ import annotations
@@ -172,6 +172,7 @@ def run_one(cfg: dict, combo: dict, sweep: str, dataset, data_dir: Path, data_ta
                     plt.figure()
                     plot_metric_heatmap(block["metric_matrix"], order, annotate=len(order) <= 12,
                                         title=f"{m} | {scen} | {strat['name']} | {model['name']} | s{seed}",
+                                        ignore_upper_diagonal=not cfg.get("heatmap_show_upper_diagonal", False),
                                         output_path=naming.file_in(d, f"heatmap_{naming.slug(m)}", ext))
                     plt.close("all")
         cost = res["cost_callback"]
@@ -222,10 +223,14 @@ def main() -> None:
     ap.add_argument("--feature", action="append", metavar="NAME[:k=v,...]",
                     help="enable an opt-in feature for this sweep (repeatable; overrides the config's entry). "
                          "List them with: python -m lfd.features")
+    ap.add_argument("--heatmap-show-upper-diagonal", action="store_true",
+                    help="per-run heatmaps also show cells above the diagonal (hidden by default; plots only)")
     args = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
     cfg = yaml.safe_load(Path(args.config).read_text())
+    if args.heatmap_show_upper_diagonal:
+        cfg["heatmap_show_upper_diagonal"] = True  # saved in the sweep copy; plots only, never in the run id
     if cfg.get("proposal"):
         require_approved(naming.ROOT / cfg["proposal"], kind="improvement")
     for k in ("dataset", "scenarios", "strategies", "models"):

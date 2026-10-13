@@ -8,6 +8,30 @@ Scope tags: **[core-pyclad]** on by default in pyCLAD · **[core-lfd]** harness,
 **[opt-in]** off unless enabled in a sweep (`features:` or `--feature`) · **[behaviour-change]** changes numbers of existing configs.
 
 ## [Unreleased]
+### Added
+- [core-lfd] `DiagonalAverage` (mean of M[i][i], the just-learned concept; reuses pyCLAD's
+  `ScheduleAwareNewTaskAcquisition` with the identity schedule) and `PastConceptsAverage` (mean of M[i][j], j<i)
+  in `lfd/metrics.py`, registered in `SUMMARY_METRICS`. `ContinualAverage` unchanged. New runs store both in
+  `__results.json` and `runs_index.jsonl`. (BL-0005)
+  Use: automatic; columns `AP__DiagonalAverage`, `AP__PastConceptsAverage`, ...
+- [core-lfd] `lfd.evaluate` recomputes both metrics post-hoc from each run's saved `metric_matrix` (older runs
+  included, no retraining) and adds them to `__comparison.csv`, `__summary.md` and `__paired_vs_naive.csv`. New
+  `__cellwise_vs_naive.csv` (seed-paired better / equal / worse cell counts vs Naive for regions all/diagonal/past)
+  and `__fig_diagonal_<scen>_<model>` (per-concept M[i][i], mean ± std). (BL-0006)
+  Use: `python -m lfd.evaluate --dataset ieee-fraud-detection --sweep <id> --metric AP [--cell-tol 0.005]`
+- [core-lfd] `__table_main.csv/.md` (ContinualAverage, DiagonalAverage, PastConceptsAverage, BWT,
+  ForgettingMeasureStrict as mean ± std, cost relative to Cumulative, n) and `__comparison.json` in every
+  evaluation folder; report-writer builds the paper table from them for AP and ROC-AUC. (BL-0008)
+- [core-lfd] `research/docs/SCENARIOS_AND_DATASETS.md` and `research/docs/RUNNING_EXPERIMENTS.md`. (BL-0010)
+### Changed
+- [core-lfd] **Default changed at the researcher's explicit request (meeting 2026-10-12, item 3):** heatmaps
+  (per-run `__heatmap_*` and evaluation `fig_heatmaps_*` / `fig_heatmap-diff-vs-naive_*`) hide cells above the
+  diagonal. Plots only; no metric, CSV or run id changes. (BL-0007)
+  Use (show them again): sweep YAML `heatmap_show_upper_diagonal: true` or `python -m lfd.run ... --heatmap-show-upper-diagonal`;
+  `python -m lfd.evaluate ... --show-upper-diagonal`.
+### Fixed
+- [core-lfd] `lfd.evaluate` heatmap grids looked up the results block as `concept_metric_callback_<CLI name>`,
+  so `--metric F1` (block `F1-Score`) silently produced no heatmaps; now resolved via the registry. No numbers change.
 
 ## [0.2.0] - 2026-10-12
 Rebuilt the project on the latest upstream pyCLAD (v0.3.0+, commit 9de39e1). Old project preserved as tag `legacy-v1`
